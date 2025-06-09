@@ -1,7 +1,8 @@
 from app import db
 from datetime import datetime, timezone
+from .mixins import TimestampMixin
 
-class Trip(db.Model):
+class Trip(db.Model, TimestampMixin):
     __tablename__ = 'trips'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -12,11 +13,6 @@ class Trip(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     itinerary = db.Column(db.JSON, default={})
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
-
-    # Relationship
-    user = db.relationship('User', backref=db.backref('trips', lazy=True))
 
     def __repr__(self):
         return f'<Trip {self.destination}>'
